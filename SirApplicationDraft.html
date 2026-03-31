@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Voter Appeal Generator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+    }
+    .container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, textarea, button {
+        width: 100%;
+        margin-top: 10px;
+        padding: 10px;
+        font-size: 16px;
+    }
+    button {
+        background: #007BFF;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    button:hover {
+        background: #0056b3;
+    }
+    .copy-btn {
+        background: #28a745;
+    }
+    .copy-btn:hover {
+        background: #1e7e34;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Voter Appeal Generator</h2>
+
+    <label>Voter ID (EPIC)</label>
+    <input type="text" id="voterId" required>
+
+    <label>AC No</label>
+    <input type="text" id="acNo" value="274 Galsi SC">
+
+    <label>Part No</label>
+    <input type="text" id="partNo" required>
+
+    <label>Serial No</label>
+    <input type="text" id="serialNo" required>
+
+    <button onclick="generateText()">Generate</button>
+
+    <textarea id="output" rows="12" placeholder="Generated text will appear here..."></textarea>
+
+    <button class="copy-btn" onclick="copyText()">📋 Copy</button>
+</div>
+
+<script>
+function generateText() {
+    let voterId = document.getElementById("voterId").value.trim();
+    let acNo = document.getElementById("acNo").value.trim();
+    let partNo = document.getElementById("partNo").value.trim();
+    let serialNo = document.getElementById("serialNo").value.trim();
+
+    if (!voterId || !partNo || !serialNo) {
+        alert("Please fill all required fields!");
+        return;
+    }
+
+    let text = `I am writing to formally appeal against the deletion of my name from the supplementary voter list.
+
+My EPIC (Voter ID) number is ${voterId}, AC No - ${acNo}, Part No - ${partNo}, Serial No - ${serialNo}, based on the draft electoral roll published on 16.12.2025.
+
+I have been a regular voter and a permanent resident of this part. Despite having all valid documents, my name has been deleted without any valid reason.
+
+Even though I have submitted all the documents given below:
+(1) EF form
+(2) Notice
+(3) Aadhaar
+(4) PAN
+and the copy of the page where my father's name appeared in the 2002 Electoral Roll.
+
+Therefore, I request you to kindly review my documents and re-include my name in the voter list as soon as possible to ensure my democratic right to vote.`;
+
+    document.getElementById("output").value = text;
+}
+
+function copyText() {
+    let textArea = document.getElementById("output");
+    textArea.select();
+    document.execCommand("copy");
+    alert("Copied to clipboard!");
+}
+</script>
+
+</body>
+</html>
