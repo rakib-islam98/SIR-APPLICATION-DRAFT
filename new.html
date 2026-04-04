@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Voter Appeal Generator</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+input, textarea, button, select {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+button {
+    background: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+button:hover {
+    background: #0056b3;
+}
+.copy-btn {
+    background: #28a745;
+}
+.copy-btn:hover {
+    background: #1e7e34;
+}
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #333;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 6px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Voter Appeal Generator</h2>
+
+    <label>Name</label>
+    <input type="text" id="name" required>
+
+    <label>EPIC Number</label>
+    <input type="text" id="epic" required oninput="this.value = this.value.toUpperCase()">
+
+    <label>Assembly No</label>
+    <input type="text" id="assemblyNo" value="274 SC" required>
+
+    <label>Assembly Name</label>
+    <input type="text" id="assemblyName" value="GALSI" required>
+
+    <label>Part Number</label>
+    <input type="text" id="partNo" required>
+
+    <label>Serial Number</label>
+    <input type="text" id="serialNo" required>
+
+    <label>Reason</label>
+    <select id="reason" required onchange="toggleOtherReason()">
+        <option value="">-- Select Reason --</option>
+        <option value="children">6 children have claimed my father as their father</option>
+        <option value="age">Incorrect age details of me and my father in voter records</option>
+        <option value="linkage">No family linkage or parents’ names missing in 2002 voter list</option>
+        <option value="surname">Mismatch in surname/name between me and my father in records</option>
+        <option value="other">Other</option>
+    </select>
+
+    <div id="otherReasonContainer" style="display:none;">
+        <label>Enter Reason</label>
+        <textarea id="otherReason" rows="4"
+        placeholder="Example: my father's name is incorrectly recorded in the voter list, and my family details do not match official documents"></textarea>
+    </div>
+
+    <button onclick="generateText()">Generate</button>
+
+    <textarea id="output" rows="16" placeholder="Generated text will appear here..."></textarea>
+
+    <button class="copy-btn" onclick="copyText()">📋 Copy</button>
+</div>
+
+<div id="toast" class="toast">Copied to clipboard!</div>
+
+<script>
+
+function toggleOtherReason() {
+    let reason = document.getElementById("reason").value;
+    let container = document.getElementById("otherReasonContainer");
+
+    if (reason === "other") {
+        container.style.display = "block";
+    } else {
+        container.style.display = "none";
+        document.getElementById("otherReason").value = "";
+    }
+}
+
+function getReasonText(reason, otherReason) {
+    switch(reason) {
+
+        case "children":
+            return `In the notice, it is clearly stated that 6 children have claimed my father as their father, which is absolutely false. We are 4 brothers and sisters in the family, out of which my name has been deleted from the list.
+
+I am submitting this appeal along with necessary identity and address proof for verification.`;
+
+        case "age":
+            return `In the notice, it is clearly stated that my father's age and my age are different and were wrongly inputted in the voter list of the years 2002 and 2026.
+
+I am submitting this appeal along with necessary identity proof, age proof, and address proof for verification.`;
+
+        case "linkage":
+            return `In the notice, it is clearly stated that I have not mentioned any family linkage in my Enumeration Form due to the earlier death of my parents at the time of the last SIR. In the voter list of 2002, my parents' names were not mentioned.
+
+I am submitting this appeal along with necessary identity proof, family linkage proof, and address proof for verification.`;
+
+        case "surname":
+            return `In the notice, it is clearly stated that my father's surname and my name and surname are different and were wrongly inputted in documents in the voter list of the years 2002 and 2026.
+
+I am submitting this appeal along with necessary identity proof, age proof, and address proof for verification.`;
+
+        case "other":
+            return `In the notice, it is stated that ${otherReason}.
+
+I am submitting this appeal along with necessary supporting documents for verification.`;
+
+        default:
+            return "";
+    }
+}
+
+function generateText() {
+
+    let name = document.getElementById("name").value.trim();
+    let epic = document.getElementById("epic").value.trim();
+    let assemblyNo = document.getElementById("assemblyNo").value.trim();
+    let assemblyName = document.getElementById("assemblyName").value.trim();
+    let partNo = document.getElementById("partNo").value.trim();
+    let serialNo = document.getElementById("serialNo").value.trim();
+    let reason = document.getElementById("reason").value;
+    let otherReason = document.getElementById("otherReason").value.trim();
+
+    if (!name || !epic || !assemblyNo || !assemblyName || !partNo || !serialNo || !reason) {
+        alert("Please fill all required fields!");
+        return;
+    }
+
+    if (reason === "other") {
+        if (!otherReason) {
+            alert("Please enter the reason!");
+            return;
+        }
+        if (otherReason.length < 20) {
+            alert("Reason must be at least 20 characters long.");
+            return;
+        }
+    }
+
+    let reasonText = getReasonText(reason, otherReason);
+
+    let finalText = `I am formally appealing against the exclusion of my name from the current electoral roll. My name is - ${name}. My EPIC number is - ${epic}, Assembly No - ${assemblyNo}, Assembly Name - ${assemblyName}, Part Number - ${partNo}, Serial Number - ${serialNo}.
+
+As per the draft electoral roll published on 16.12.2025, my name was mentioned as an "Under Adjudication" voter for verification. When the supplementary list was published on 20.03.2026, I discovered that my name had been deleted from the electoral roll without any valid reason.
+
+${reasonText}
+
+I request you to kindly review my documents and re-include my name in the voter list as soon as possible to ensure my democratic right to vote. I also request that I be allowed to exercise my right to vote in upcoming elections without any hindrance.`;
+
+    document.getElementById("output").value = finalText;
+}
+
+function copyText() {
+    let textArea = document.getElementById("output");
+    textArea.select();
+    document.execCommand("copy");
+
+    let toast = document.getElementById("toast");
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2000);
+}
+
+</script>
+
+</body>
+</html>
